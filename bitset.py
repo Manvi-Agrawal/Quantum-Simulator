@@ -10,5 +10,15 @@ class Bitset:
             else:
                 self.bits[arg] = '0'
     
+    def truncate(self, new_length):
+         self.bits = self.bits[:new_length]
+
     def __str__(self) -> str:
         return ''.join(self.bits)
+    
+    def __eq__(self, other): 
+        if not isinstance(other, Bitset):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return self.length == other.length and str(self) == str(other)

@@ -6,7 +6,9 @@ from pathlib import Path
 
 # Import your simulate function here.
 # cs238 can be a file, a folder with an __init__.py file,
-from cs238 import simulate
+# from cs238 import simulate
+from simulator import simulate
+
 
 
 def cirq_simulate(qasm_string: str) -> list:
@@ -57,4 +59,5 @@ for qasm_file in qasm_dir.glob("**/*.qasm"):
     # run cirq's simulator on the qasm string
     cirq_state_vector = cirq_simulate(qasm_string)
     # compare the results!
+    print("\n\n ==Simulator comparison==")
     print(compare(state_vector, cirq_state_vector))

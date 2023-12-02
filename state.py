@@ -87,7 +87,23 @@ class QuantumState:
         
         self.state = copy(res)
         
-    
+    # Cirq result : [0j, (1+0j)]
+    def state_vector(self):
+        repr = [int(str(wk.ket)[::-1], 2) for wk in self.state]
+        # print(f"repr of state_vector :: {repr}")
+
+        # print(f"max(repr) of state_vector :: {max(repr)}")
+
+
+        m = 1+ int((np.log2(max(repr))))
+
+        # print(f"repr bits: {m}")
+
+        for wk in self.state:
+            wk.ket.truncate(m)
+
+        return [wk.amplitude for wk in self.state]
+         
 
     def display_state(self):
         for bitset in self.state:

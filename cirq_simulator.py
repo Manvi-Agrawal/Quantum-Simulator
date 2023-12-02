@@ -25,7 +25,7 @@ def cirq_simulate(qasm_string: str) -> list:
     return statevector
 
 
-qasm_file = 'qasm/sample.qasm'
+qasm_file = 'qasm/sample2.qasm'
 
 qasm_string = ""
 with open(qasm_file, "r") as f:

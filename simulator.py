@@ -2,9 +2,10 @@ import copy
 import numpy as np
 
 from operation import Operation
-from weighted_ket import WeightedKet
+from state import QuantumState
+# from weighted_ket import WeightedKet
 
-qasm_file = 'qasm/sample_tgate.qasm'
+qasm_file = 'qasm/sample2.qasm'
 
 
 def step(op, state):
@@ -89,14 +90,11 @@ def parse_register(reg):
     return [int(x[1:].lstrip('[').rstrip(']')) for x in args]
 
 
-def display_state(state):
-    for bitset in state:
-        print(f"{bitset} + ")
 
 
 # Cirq result : [0j, (1+0j)]
 def simulate(qasm_string):
-    state = []
+    # state = []
     # Skip boilerplate
     lines = qasm_string.split('\n')[2:-1]
 
@@ -106,7 +104,7 @@ def simulate(qasm_string):
         args = parse_register(reg)
         num_bits = args[0]
         print(f"Added |0>^{num_bits}")
-        state.append(WeightedKet(num_bits))
+        state = QuantumState(num_bits)
 
 
     # Skip Qreg and Creg allocation
@@ -121,16 +119,18 @@ def simulate(qasm_string):
             args = parse_register(reg)
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)
-            state = step(op, state)
-            display_state(state)
+            state.step(op)
+            state.display_state()
 
-        state.sort(key=lambda x: "".join(x.ket.bits))
+        state.sort()
         print("After sort")
-        display_state(state)
+        state.display_state()
 
-        state = consolidate(state)
+
+        state.consolidate()
         print("After consolidate")
-        display_state(state)
+        state.display_state()
+
 
     # print(f"Len : {len(state)}")    
 

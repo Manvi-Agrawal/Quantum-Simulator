@@ -1,7 +1,7 @@
 class Bitset:
-    def __init__(self, length):
-        self.length = length
-        self.bits = ['0']*length
+    def __init__(self, bits=None):
+        self.bits = bits
+        self.length = len(bits)
     
     def bit_flip(self, arg):
             # print(f"Execute bit flip on {arg}")

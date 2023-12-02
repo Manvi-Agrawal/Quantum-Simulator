@@ -2,8 +2,17 @@ import numpy as np
 from copy import copy, deepcopy
 
 from weighted_ket import WeightedKet
+from bitset import Bitset
 
 
+def generate_redundant_states(N):
+    res = []
+    for n in range(2**N):
+        bstr = format(n, f'0{N}b')
+        bstr = [b for b in bstr]
+        s = WeightedKet(N, amplitude = 0.0 + 0.0*(1j), ket = Bitset(bstr))
+        res.append(s)
+    return res
 
 
 class QuantumState:
@@ -97,10 +106,31 @@ class QuantumState:
 
         m = 1+ int((np.log2(max(repr))))
 
-        # print(f"repr bits: {m}")
+        print(f"repr bits: {m}")
 
         for wk in self.state:
             wk.ket.truncate(m)
+
+
+        # print("Before extras...")
+        # self.display_state()
+
+        extras = generate_redundant_states(m)
+        # print("Extras...")
+        # extras.display_state()
+
+        self.state.extend(extras)
+        # print("Appended extras...")
+        # self.display_state()
+
+        self.sort()
+        
+        # print("Sort after extras...")
+        # self.display_state()
+
+        self.consolidate()
+        # print("Consolidate state...")
+        # self.display_state()
 
         return [wk.amplitude for wk in self.state]
          

@@ -106,7 +106,7 @@ class QuantumState:
 
         m = 1+ int((np.log2(max(repr))))
 
-        print(f"repr bits: {m}")
+        # print(f"repr bits: {m}")
 
         for wk in self.state:
             wk.ket.truncate(m)

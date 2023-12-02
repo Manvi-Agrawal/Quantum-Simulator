@@ -18,7 +18,7 @@ def simulate(qasm_string):
     if alloc == 'qreg':
         args = parse_register(reg)
         num_bits = args[0]
-        print(f"Added |0>^{num_bits}")
+        # print(f"Added |0>^{num_bits}")
         state = QuantumState(num_bits)
 
 
@@ -27,7 +27,7 @@ def simulate(qasm_string):
     
     # Process Op data
     for line in lines:
-        print(f"----{line}-----")
+        # print(f"----{line}-----")
         (gate, reg) = line.split(" ")
 
         if gate in ['x', 'h', 'cx', 't', 'tdag']:
@@ -35,11 +35,11 @@ def simulate(qasm_string):
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)
             state.step(op)
-            state.display_state()
+            # state.display_state()
 
         state.sort()
-        print("After sort")
-        state.display_state()
+        # print("After sort")
+        # state.display_state()
 
 
         state.consolidate()

@@ -2,7 +2,7 @@ import copy
 import numpy as np
 
 
-qasm_file = 'qasm/sample3.qasm'
+qasm_file = 'qasm/sample_tgate.qasm'
 # Let state be global variable
 # state = []
 
@@ -74,6 +74,20 @@ def step(op, state):
             if wk.ket.bits[op.args[0]] == '1':
                 wk.ket.bit_flip(op.args[1])
 
+        if (op.gate == "t"):
+            print("T gate  detected...")
+            if wk.ket.bits[op.args[0]] == '1':
+                # >>> np.exp(-0.25*np.pi*1j)
+                # (0.7071067811865476-0.7071067811865476j)
+                wk.amplitude_change(np.exp(-0.25*np.pi*1j))
+
+        if (op.gate == "tdag"):
+            print("Tdag gate  detected...")
+            if wk.ket.bits[op.args[0]] == '1':
+                # >>> np.exp(-0.25*np.pi*1j)
+                # (0.7071067811865476-0.7071067811865476j)
+                wk.amplitude_change(np.exp(0.25*np.pi*1j))
+
 
     return res
 
@@ -96,8 +110,11 @@ def consolidate(state):
         res.append(state[i])
         i = i+1
 
-    if str(res[-1].ket) != str(state[N-1].ket):
+    if res != [] and str(res[-1].ket) != str(state[N-1].ket):
         res.append(state[N-1])
+
+    if res == []:
+        res.append(state[0])
      
     return res
 
@@ -136,7 +153,7 @@ def simulate(qasm_string):
         print(f"----{line}-----")
         (gate, reg) = line.split(" ")
 
-        if gate in ['x', 'h', 'cx']:
+        if gate in ['x', 'h', 'cx', 't', 'tdag']:
             args = parse_register(reg)
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)

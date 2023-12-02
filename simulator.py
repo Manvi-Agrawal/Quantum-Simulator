@@ -1,46 +1,10 @@
 import copy
 import numpy as np
 
+from operation import Operation
+from weighted_ket import WeightedKet
 
 qasm_file = 'qasm/sample_tgate.qasm'
-# Let state be global variable
-# state = []
-
-
-
-class Operation:
-    def __init__(self, gate, args):
-        self.gate = gate
-        self.args = args
-
-
-class Bitset:
-    def __init__(self, length):
-        self.length = length
-        self.bits = ['0']*length
-    
-    def bit_flip(self, arg):
-            # print(f"Execute bit flip on {arg}")
-            if self.bits[arg] == '0':
-                self.bits[arg] = '1'
-            else:
-                self.bits[arg] = '0'
-    
-    def __str__(self) -> str:
-        return ''.join(self.bits)
-
-
-class WeightedKet:
-    def __init__(self, length):
-        self.length = length
-        self.amplitude = 1.0 + 0.0 * 1j
-        self.ket = Bitset(length)
-
-    def __str__(self) -> str:
-        return f"{self.amplitude} * {self.ket}"
-    
-    def amplitude_change(self, factor):
-        self.amplitude *= factor
 
 
 def step(op, state):

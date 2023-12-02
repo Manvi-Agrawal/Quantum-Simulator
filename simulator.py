@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 
 qasm_file = 'qasm/sample2.qasm'
@@ -38,28 +39,35 @@ class WeightedKet:
     def __str__(self) -> str:
         return f"{self.amplitude} * {self.ket}"
     
-    def phase_flip(self):
-        self.amplitude *= -1
+    def amplitude_change(self, factor):
+        self.amplitude *= factor
 
 
 
 def step(op, state):
-    res = copy.deepcopy(state)
+    # Note : Making a copy here to be able to influence the original amptitudes when using H gate
+    res = copy.copy(state)
     print(f"Len(state) in step : {len(state)}")
     for wk in state:
         if (op.gate == "x"):
             print("X gate  detected...")
             wk.ket.bit_flip(op.args)
-            res=state
 
         if (op.gate == "h"):
             print("H gate  detected...")
+            # print(f"wk before amp change:{wk}")
+            wk.amplitude_change(1/np.sqrt(2))
+            # print(f"wk after amp change:{wk}")
+
+
             wk_new = copy.deepcopy(wk)
             
             wk_new.ket.bit_flip(op.args)
+            # wk_new.amplitude_change(1/np.sqrt(2))
+
 
             if wk.ket.bits[op.args] == '1':
-                wk_new.phase_flip()
+                wk_new.amplitude_change(-1)
 
             res.append(wk_new)
     return res

@@ -42,8 +42,6 @@ class WeightedKet:
     def amplitude_change(self, factor):
         self.amplitude *= factor
 
-
-
 def step(op, state):
     # Note : Making a copy here to be able to influence the original amptitudes when using H gate
     res = copy.copy(state)
@@ -67,7 +65,7 @@ def step(op, state):
 
 
             if wk.ket.bits[op.args] == '1':
-                wk_new.amplitude_change(-1)
+                wk.amplitude_change(-1)
 
             res.append(wk_new)
     return res
@@ -112,7 +110,11 @@ def simulate(qasm_string):
             op = Operation(gate, args)
             state = step(op, state)
             display_state(state)
-        # state.sort()
+
+        state.sort(key=lambda x: "".join(x.ket.bits))
+        print("After sort")
+        display_state(state)
+
         # consolidate()
 
     # print(f"Len : {len(state)}")    

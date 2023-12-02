@@ -30,7 +30,7 @@ def simulate(qasm_string):
         # print(f"----{line}-----")
         (gate, reg) = line.split(" ")
 
-        if gate in ['x', 'h', 'cx', 't', 'tdag']:
+        if gate in ['x', 'h', 'cx', 't', 'tdg']:
             args = parse_register(reg)
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)

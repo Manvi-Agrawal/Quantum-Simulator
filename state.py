@@ -58,8 +58,8 @@ class QuantumState:
                     # (0.7071067811865476-0.7071067811865476j)
                     wk.amplitude_change(np.exp(-0.25*np.pi*1j))
 
-            if (op.gate == "tdag"):
-                # print("Tdag gate  detected...")
+            if (op.gate == "tdg"):
+                # print("tdg gate  detected...")
                 if wk.ket.bits[op.args[0]] == '1':
                     # >>> np.exp(-0.25*np.pi*1j)
                     # (0.7071067811865476-0.7071067811865476j)
@@ -124,7 +124,7 @@ class QuantumState:
         # self.display_state()
 
         self.sort()
-        
+
         # print("Sort after extras...")
         # self.display_state()
 

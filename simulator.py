@@ -20,7 +20,7 @@ class Bitset:
         self.bits = ['0']*length
     
     def bit_flip(self, arg):
-            print(f"Execute bit flip on {arg}")
+            # print(f"Execute bit flip on {arg}")
             if self.bits[arg] == '0':
                 self.bits[arg] = '1'
             else:

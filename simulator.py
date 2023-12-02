@@ -41,20 +41,6 @@ class WeightedKet:
     def phase_flip(self):
         self.amplitude *= -1
 
-    def hadamard(self, arg):
-        print("Running h gate...")
-        wk_new = copy.deepcopy(self)
-
-        if self.ket.bits[arg] == '1':
-            wk_new.phase_flip()
-
-        wk_new.ket.bit_flip(arg)
-        
-
-        print(f"H transform: {wk_new}")
-
-        return wk_new
-
 
 
 def step(op, state):
@@ -68,13 +54,14 @@ def step(op, state):
 
         if (op.gate == "h"):
             print("H gate  detected...")
-            # wk_new = wk
+            wk_new = copy.deepcopy(wk)
             
-            # if wk_new.ket.bits[op.args] == '1':
-            #     wk_new.phase_flip()
-            print(f'wk before H::{wk}...')
-            res.append(wk.hadamard(op.args))
-            print(f'wk after H::{wk}...')
+            wk_new.ket.bit_flip(op.args)
+
+            if wk.ket.bits[op.args] == '1':
+                wk_new.phase_flip()
+
+            res.append(wk_new)
     return res
 
 

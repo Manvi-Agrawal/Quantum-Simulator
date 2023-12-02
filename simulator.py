@@ -1,3 +1,12 @@
+import copy
+
+
+qasm_file = 'qasm/sample2.qasm'
+# Let state be global variable
+# state = []
+
+
+
 class Operation:
     def __init__(self, gate, args):
         self.gate = gate
@@ -10,6 +19,7 @@ class Bitset:
         self.bits = ['0']*length
     
     def bit_flip(self, arg):
+            print(f"Execute bit flip on {arg}")
             if self.bits[arg] == '0':
                 self.bits[arg] = '1'
             else:
@@ -27,30 +37,61 @@ class WeightedKet:
 
     def __str__(self) -> str:
         return f"{self.amplitude} * {self.ket}"
+    
+    def phase_flip():
+        self.amplitude *= -1
+
+    def hadamard(self, arg):
+        print("Running h gate...")
+        wk_new = copy.deepcopy(self)
+
+        if self.ket.bits[arg] == '1':
+            wk_new.phase_flip()
+
+        wk_new.ket.bit_flip(arg)
+        
+
+        print(f"H transform: {wk_new}")
+
+        return wk_new
+
 
 
 def step(op, state):
+    res = state
+    print(f"Len(state) in step : {len(state)}")
     for wk in state:
         if (op.gate == "x"):
+            print("X gate  detected...")
             wk.ket.bit_flip(op.args)
-        # if (op.gate == "h"):
-            # wk.ket.flip(op.args)
+            res=state
 
+        if (op.gate == "h"):
+            print("H gate  detected...")
+            # wk_new = wk
+            
+            # if wk_new.ket.bits[op.args] == '1':
+            #     wk_new.phase_flip()
+            print(f'wk before H::{wk}...')
+            res.append(wk.hadamard(op.args))
+            print(f'wk after H::{wk}...')
+            break
+    return res
 
-
-
-qasm_file = 'qasm/sample.qasm'
 
 
 def parse_register(reg):
     return int(reg.strip()[1:-1].lstrip('[').rstrip(']') )
 
 
+def display_state(state):
+    for bitset in state:
+        print(f"{bitset} + ")
+
 
 # Cirq result : [0j, (1+0j)]
 def simulate(qasm_string):
     state = []
-
     # Skip boilerplate
     lines = qasm_string.split('\n')[2:-1]
 
@@ -71,17 +112,17 @@ def simulate(qasm_string):
         print(f"----{line}-----")
         (gate, reg) = line.split(" ")
 
-        if gate == 'x':
+        if gate in ['x', 'h']:
             args = parse_register(reg)
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)
-            step(op, state)
+            state = step(op, state)
+            display_state(state)
         # state.sort()
         # consolidate()
 
+    # print(f"Len : {len(state)}")    
 
-    for bitset in state:
-        print(f"{bitset} + ")
 
 
 with open(qasm_file, "r") as f:

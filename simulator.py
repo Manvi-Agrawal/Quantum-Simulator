@@ -27,7 +27,7 @@ class Bitset:
                 self.bits[arg] = '0'
     
     def __str__(self) -> str:
-        return f"|{''.join(self.bits)}>"
+        return ''.join(self.bits)
 
 
 class WeightedKet:
@@ -41,6 +41,7 @@ class WeightedKet:
     
     def amplitude_change(self, factor):
         self.amplitude *= factor
+
 
 def step(op, state):
     # Note : Making a copy here to be able to influence the original amptitudes when using H gate
@@ -70,6 +71,29 @@ def step(op, state):
             res.append(wk_new)
     return res
 
+
+def consolidate(state):
+    res = []
+
+    i = 0
+    N = len(state)
+    
+    while i < N - 1:
+        amp_net = state[i].amplitude
+
+        while i<N-1 and str(state[i].ket) == str(state[i+1].ket):
+            # print(f"Adding {state[i+1].amplitude} to {amp_net}")
+            amp_net += state[i+1].amplitude
+            i += 1
+        
+        state[i].amplitude = amp_net
+        res.append(state[i])
+        i = i+1
+
+    if str(res[-1].ket) != str(state[N-1].ket):
+        res.append(state[N-1])
+     
+    return res
 
 
 def parse_register(reg):
@@ -115,7 +139,9 @@ def simulate(qasm_string):
         print("After sort")
         display_state(state)
 
-        # consolidate()
+        state = consolidate(state)
+        print("After consolidate")
+        display_state(state)
 
     # print(f"Len : {len(state)}")    
 

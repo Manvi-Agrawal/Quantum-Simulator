@@ -2,7 +2,7 @@ import copy
 import numpy as np
 
 
-qasm_file = 'qasm/sample2.qasm'
+qasm_file = 'qasm/sample3.qasm'
 # Let state be global variable
 # state = []
 
@@ -50,7 +50,7 @@ def step(op, state):
     for wk in state:
         if (op.gate == "x"):
             print("X gate  detected...")
-            wk.ket.bit_flip(op.args)
+            wk.ket.bit_flip(op.args[0])
 
         if (op.gate == "h"):
             print("H gate  detected...")
@@ -61,14 +61,20 @@ def step(op, state):
 
             wk_new = copy.deepcopy(wk)
             
-            wk_new.ket.bit_flip(op.args)
+            wk_new.ket.bit_flip(op.args[0])
             # wk_new.amplitude_change(1/np.sqrt(2))
 
-
-            if wk.ket.bits[op.args] == '1':
+            # TODO: if (wk.ket.get(op.arg1)) 
+            if wk.ket.bits[op.args[0]] == '1':
                 wk.amplitude_change(-1)
 
             res.append(wk_new)
+
+        if op.gate == "cx":
+            if wk.ket.bits[op.args[0]] == '1':
+                wk.ket.bit_flip(op.args[1])
+
+
     return res
 
 
@@ -97,7 +103,9 @@ def consolidate(state):
 
 
 def parse_register(reg):
-    return int(reg.strip()[1:-1].lstrip('[').rstrip(']') )
+    reg = reg.strip()[:-1]
+    args = reg.split(",")
+    return [int(x[1:].lstrip('[').rstrip(']')) for x in args]
 
 
 def display_state(state):
@@ -115,7 +123,7 @@ def simulate(qasm_string):
     (alloc, reg) = lines[0].split(" ")
     if alloc == 'qreg':
         args = parse_register(reg)
-        num_bits = args
+        num_bits = args[0]
         print(f"Added |0>^{num_bits}")
         state.append(WeightedKet(num_bits))
 
@@ -128,7 +136,7 @@ def simulate(qasm_string):
         print(f"----{line}-----")
         (gate, reg) = line.split(" ")
 
-        if gate in ['x', 'h']:
+        if gate in ['x', 'h', 'cx']:
             args = parse_register(reg)
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)

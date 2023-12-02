@@ -57,8 +57,9 @@ def simulate(qasm_string):
 
 
 if __name__ == "__main__":
-    qasm_file = 'qasm/sample2.qasm'
+    qasm_file = 'sample_qasm/sample.qasm'
 
     with open(qasm_file, "r") as f:
         qasm_string = f.read()
-        simulate(qasm_string)
+        result = simulate(qasm_string)
+        print(result)

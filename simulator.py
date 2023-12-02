@@ -38,7 +38,7 @@ class WeightedKet:
     def __str__(self) -> str:
         return f"{self.amplitude} * {self.ket}"
     
-    def phase_flip():
+    def phase_flip(self):
         self.amplitude *= -1
 
     def hadamard(self, arg):
@@ -58,7 +58,7 @@ class WeightedKet:
 
 
 def step(op, state):
-    res = state
+    res = copy.deepcopy(state)
     print(f"Len(state) in step : {len(state)}")
     for wk in state:
         if (op.gate == "x"):
@@ -75,7 +75,6 @@ def step(op, state):
             print(f'wk before H::{wk}...')
             res.append(wk.hadamard(op.args))
             print(f'wk after H::{wk}...')
-            break
     return res
 
 

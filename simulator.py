@@ -1,6 +1,8 @@
 from operation import Operation
 from state import QuantumState
 
+import numpy as np
+
 
 def parse_register(reg):
     reg = reg.strip()[:-1]
@@ -51,7 +53,8 @@ def simulate(qasm_string):
     # print(f"res = {result}... \n Final State ...")
     # state.display_state()
 
-    return result
+    statevector = list(np.around(result, 3))
+    return statevector
 
     # print(f"Len : {len(state)}")    
 

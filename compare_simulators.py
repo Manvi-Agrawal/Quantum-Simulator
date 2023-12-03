@@ -44,12 +44,7 @@ def compare(state_vector, cirq_state_vector):
     return np.all(np.isclose(state_vector, cirq_state_vector))
 
 
-# get the directory of qasm files and make sure it's a directory
-qasm_dir = Path(sys.argv[1])
-assert qasm_dir.is_dir()
-
-# iterate the qasm files in the directory
-for qasm_file in qasm_dir.glob("**/*.qasm"):
+def compare_results(qasm_file):
     # read the qasm file
     with open(qasm_file, "r") as f:
         qasm_string = f.read()
@@ -59,5 +54,22 @@ for qasm_file in qasm_dir.glob("**/*.qasm"):
     # run cirq's simulator on the qasm string
     cirq_state_vector = cirq_simulate(qasm_string)
     # compare the results!
-    print("\n\n ==Simulator comparison==")
-    print(compare(state_vector, cirq_state_vector))
+    print(f"\n\n ==Simulator comparison : {qasm_file}==")
+    # print(f"Actual: {state_vector}; Expected: {cirq_state_vector}")
+    res = compare(state_vector, cirq_state_vector)
+    print(res)
+    return res
+
+if __name__ == "__main__":
+    # get the directory of qasm files and make sure it's a directory
+    qasm_dir = Path(sys.argv[1])
+
+    blacklist = ["con1_216.qasm"]
+    if qasm_dir.is_dir():
+        # iterate the qasm files in the directory
+        for qasm_file in qasm_dir.glob("**/*.qasm"):
+            print(f"{qasm_file} not in {blacklist}....")
+            assert compare_results(qasm_file)
+    else:
+        assert compare_results(sys.argv[1])
+

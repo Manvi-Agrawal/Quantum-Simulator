@@ -2,6 +2,7 @@ from operation import Operation
 from state import QuantumState
 
 import numpy as np
+import sys
 
 
 def parse_register(reg):
@@ -60,7 +61,7 @@ def simulate(qasm_string):
 
 
 if __name__ == "__main__":
-    qasm_file = 'sample_qasm/sample.qasm'
+    qasm_file = sys.argv[1]
 
     with open(qasm_file, "r") as f:
         qasm_string = f.read()

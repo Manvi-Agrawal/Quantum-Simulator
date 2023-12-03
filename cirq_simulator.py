@@ -4,7 +4,10 @@ import cirq
 from cirq.contrib.qasm_import import circuit_from_qasm
 from pathlib import Path
 
-
+# Import your simulate function here.
+# cs238 can be a file, a folder with an __init__.py file,
+# from cs238 import simulate
+from simulator import simulate
 
 def cirq_simulate(qasm_string: str) -> list:
     """Simulate a qasm string
@@ -24,18 +27,27 @@ def cirq_simulate(qasm_string: str) -> list:
     statevector = list(np.around(result.state_vector(), 3))
     return statevector
 
+def expected_result(qasm_file):
+    # read the qasm file
+    with open(qasm_file, "r") as f:
+        qasm_string = f.read()
 
-qasm_file = 'qasm/sample2.qasm'
+    # run cirq's simulator on the qasm string
+    cirq_state_vector = cirq_simulate(qasm_string)
+    
+    print(f"{qasm_file} :: {cirq_state_vector}")
+    return cirq_state_vector
 
-qasm_string = ""
-with open(qasm_file, "r") as f:
-    qasm_string = f.read()
+if __name__ == "__main__":
+    # get the directory of qasm files and make sure it's a directory
+    qasm_dir = Path(sys.argv[1])
 
-# run your simulate function on the qasm string
-# state_vector = simulate(qasm_string)
+    blacklist = ["con1_216.qasm"]
+    if qasm_dir.is_dir():
+        # iterate the qasm files in the directory
+        for qasm_file in qasm_dir.glob("**/*.qasm"):
+            # print(f"{qasm_file} not in {blacklist}....")
+            expected_result(qasm_file)
+    else:
+        expected_result(sys.argv[1])
 
-# run cirq's simulator on the qasm string
-cirq_state_vector = cirq_simulate(qasm_string)
-
-print(f"Cirq result : {cirq_state_vector}")
-# compare the results!

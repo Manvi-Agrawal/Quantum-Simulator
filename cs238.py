@@ -27,6 +27,9 @@ def simulate(qasm_string):
 
     # Skip Qreg and Creg allocation
     lines = lines[2:]
+
+    # Track the max index of register used to truncate statevector
+    max_register_index = 0
     
     # Process Op data
     for line in lines:
@@ -35,6 +38,9 @@ def simulate(qasm_string):
 
         if gate in ['x', 'h', 'cx', 't', 'tdg']:
             args = parse_register(reg)
+
+            max_register_index = max(args + [max_register_index])
+
             # si = WeightedKet(num_bits)
             op = Operation(gate, args)
             state.step(op)
@@ -49,7 +55,7 @@ def simulate(qasm_string):
         # print("After consolidate")
         # state.display_state()
 
-    result = state.state_vector()
+    result = state.state_vector(max_register_index+1)
 
     # print(f"res = {result}... \n Final State ...")
     # state.display_state()

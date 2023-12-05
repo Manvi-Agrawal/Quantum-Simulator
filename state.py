@@ -98,15 +98,20 @@ class QuantumState:
         
     # Cirq result : [0j, (1+0j)]
     def state_vector(self):
+        # print("Final result...")
+        # self.display_state()
+
         repr = [int(str(wk.ket)[::-1], 2) for wk in self.state]
         # print(f"repr of state_vector :: {repr}")
 
         # print(f"max(repr) of state_vector :: {max(repr)}")
+        # m_lo = 1+ int((np.log2(min(repr))))
+        # print(f"repr bits -- min: {m_lo}")
 
 
         m = 1+ int((np.log2(max(repr))))
 
-        # print(f"repr bits: {m}")
+        # print(f"repr bits -- max: {m}")
 
         for wk in self.state:
             wk.ket.truncate(m)

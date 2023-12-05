@@ -7,7 +7,6 @@ from pathlib import Path
 # Import your simulate function here.
 # cs238 can be a file, a folder with an __init__.py file,
 # from cs238 import simulate
-from simulator import simulate
 
 def cirq_simulate(qasm_string: str) -> list:
     """Simulate a qasm string

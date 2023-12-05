@@ -1,3 +1,5 @@
+# Sample Usage: .\measure-times.ps1 .\sample_qasm\ 6>>execution_times.txt
+# where sample_qasm is folder containg QASM files and result is stored in execution_times.txt
 
 [CmdletBinding()]
 Param(

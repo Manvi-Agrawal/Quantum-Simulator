@@ -5,6 +5,13 @@ Quantum Simulator for basic gates in QASM(X, CX, H, T, T.dag() ).
 ```powershell
 python simulator.py <path of QASM File>
 ```
+### Sample Output
+```powershell
+python simulator.py .\test\sample\bell_state.qasm
+```
+```text
+[(0.707+0j), 0j, 0j, (0.707+0j)]
+```
 
 ## Testing the simulator
 Use `compare_simulators.py` script.

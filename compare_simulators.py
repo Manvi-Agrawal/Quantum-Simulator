@@ -63,11 +63,9 @@ if __name__ == "__main__":
     # get the directory of qasm files and make sure it's a directory
     qasm_dir = Path(sys.argv[1])
 
-    blacklist = ["con1_216.qasm"]
     if qasm_dir.is_dir():
         # iterate the qasm files in the directory
         for qasm_file in qasm_dir.glob("**/*.qasm"):
-            print(f"{qasm_file} not in {blacklist}....")
             assert compare_results(qasm_file)
     else:
         assert compare_results(sys.argv[1])

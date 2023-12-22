@@ -17,3 +17,21 @@ OR
 ```powershell
 python compare_simulators.py <path of folder containing QASM Files>
 ```
+
+### Sample From Testing script
+``` powershell
+python compare_simulators.py .\test\sample\
+```
+```text
+==Simulator comparison : test\sample\bell_state.qasm==
+True
+
+ ==Simulator comparison : test\sample\hcancel.qasm==
+True
+
+==Simulator comparison : test\sample\tgate.qasm==
+True
+
+==Simulator comparison : test\sample\xgate.qasm==
+True
+```

@@ -5,9 +5,7 @@ from cirq.contrib.qasm_import import circuit_from_qasm
 from pathlib import Path
 
 # Import your simulate function here.
-# cs238 can be a file, a folder with an __init__.py file,
-from cs238 import simulate
-
+from simulator import simulate
 
 
 def cirq_simulate(qasm_string: str) -> list:
@@ -60,6 +58,8 @@ def compare_results(qasm_file):
     return res
 
 if __name__ == "__main__":
+    print(f"== Main Function of sim compare ==")
+
     # get the directory of qasm files and make sure it's a directory
     qasm_dir = Path(sys.argv[1])
 
